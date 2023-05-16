@@ -45,6 +45,9 @@ def main(args):
 
     ## 3. Initialize the method you want to use.
 
+    # python main2.py --data "data/dataset_MS2" --method nn --nn_type mlp --lr 1e-5 --max_iters 100
+    # python main2.py --data "data/dataset_MS2" --method nn --nn_type cnn --lr 1e-5 --max_iters 100
+
     # Neural Networks (MS2)
     if args.method == "nn":
         print("Using deep network")
@@ -53,17 +56,21 @@ def main(args):
         # Note: you might need to reshape the image data depending on the network you use!
         n_classes = get_n_classes(ytrain)
         if args.nn_type == "mlp":
-            model = ...  ### WRITE YOUR CODE HERE
+            model = MLP(
+            lr=args.lr, 
+            max_iters=args.max_iters
+            )
 
         elif args.nn_type == "cnn":
             ### WRITE YOUR CODE HERE
-            ...
+            model = CNN()
         
         summary(model)
 
         # Trainer object
         method_obj = Trainer(model, lr=args.lr, epochs=args.max_iters, batch_size=args.nn_batch_size)
     
+    # python main2.py --data "data/dataset_MS2" --method dummy_classifier 
     # Follow the "DummyClassifier" example for your methods (MS1)
     elif args.method == "dummy_classifier":
         method_obj =  DummyClassifier(arg1=1, arg2=2)
