@@ -2,6 +2,7 @@ import argparse
 
 import numpy as np
 from torchinfo import summary
+import time
 
 from src.data import load_data
 from src.methods.dummy_methods import DummyClassifier
@@ -30,12 +31,19 @@ def main(args):
 
     # Make a validation set
     if not args.test:
-        ### WRITE YOUR CODE HERE
-        pass
+        index_shuffled = np.random.permutation(len(xtrain)) # shuffle indices 
+        xtrain, ytrain = xtrain[index_shuffled], ytrain[index_shuffled] # 
+        size_val = int(0.2*len(xtrain)) # ratio for validation: 20% validation set and 80% training set
+        xtest, ytest = xtrain[:size_val], ytrain[:size_val] #overwriting xtest 
+        xtrain, ytrain = xtrain[size_val:], ytrain[size_val:]
     
     ### WRITE YOUR CODE HERE to do any other data processing
+    xtrain_means = xtrain.mean(0,keepdims=True)
+    xtrain_stds  = xtrain.std(0,keepdims=True)
+    xtrain_normalized = normalize_fn(xtrain, xtrain_means, xtrain_stds)
+    xtest_normalized = normalize_fn(xtest, xtrain_means, xtrain_stds) # normalize xtest with the same parameters as xtrain
 
-
+    s1 = time.time()
     # Dimensionality reduction (MS2)
     if args.use_pca:
         print("Using PCA")
@@ -62,9 +70,9 @@ def main(args):
             )
 
         elif args.nn_type == "cnn":
-            ### WRITE YOUR CODE HERE
-            model = CNN()
-        
+            xtrain = xtrain.reshape(-1, 1, 32, 32)
+            xtest = xtest.reshape(-1, 1, 32, 32)
+            model = CNN(input_channels=1, n_classes=20) #should use get_n_classes to generalize here!!
         summary(model)
 
         # Trainer object
@@ -84,6 +92,9 @@ def main(args):
     # Predict on unseen data
     preds = method_obj.predict(xtest)
 
+    s2 = time.time()
+    print(s2-s1)
+    print("It takes", s2-s1, "seconds")
 
     ## Report results: performance on train and valid/test sets
     acc = accuracy_fn(preds_train, ytrain)
