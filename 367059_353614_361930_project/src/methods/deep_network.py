@@ -56,7 +56,7 @@ class CNN(nn.Module):
     It should use at least one convolutional layer.
     """
 
-    def __init__(self, input_channels, n_classes):
+    def __init__(self, input_channels, n_classes, weight_decay=None):
         """
         Initialize the network.
         
@@ -106,7 +106,7 @@ class Trainer(object):
     It will also serve as an interface between numpy and pytorch.
     """
 
-    def __init__(self, model, lr, epochs, batch_size):
+    def __init__(self, model, lr, epochs, batch_size, weight_decay=None):
         """
         Initialize the trainer object for a given model.
 
@@ -120,9 +120,15 @@ class Trainer(object):
         self.epochs = epochs
         self.model = model
         self.batch_size = batch_size
+        self.weight_decay = weight_decay
 
         self.criterion = nn.CrossEntropyLoss()
         self.optimizer = optim.Adam(self.model.parameters(), lr=self.lr)
+
+        if self.weight_decay is not None:
+            self.optimizer = optim.Adam(self.model.parameters(), lr=self.lr, weight_decay=self.weight_decay)
+        else:
+            self.optimizer = optim.Adam(self.model.parameters(), lr=self.lr)
 
     def train_all(self, dataloader):
         """

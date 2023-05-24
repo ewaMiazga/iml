@@ -62,7 +62,7 @@ def main(args):
 
         # Prepare the model (and data) for Pytorch
         # Note: you might need to reshape the image data depending on the network you use!
-        n_classes = get_n_classes(ytrain)
+        number_classes = get_n_classes(ytrain)
         if args.nn_type == "mlp":
             model = MLP(
             lr=args.lr, 
@@ -72,7 +72,7 @@ def main(args):
         elif args.nn_type == "cnn":
             xtrain = xtrain.reshape(-1, 1, 32, 32)
             xtest = xtest.reshape(-1, 1, 32, 32)
-            model = CNN(input_channels=1, n_classes=20) #should use get_n_classes to generalize here!!
+            model = CNN(input_channels=1, n_classes=number_classes, weight_decay=args.weight_decay) #should use get_n_classes to generalize here!!
         summary(model)
 
         # Trainer object
@@ -131,7 +131,7 @@ if __name__ == '__main__':
     parser.add_argument('--pca_d', type=int, default=200, help="output dimensionality after PCA")
     parser.add_argument('--nn_type', default="mlp", help="which network to use, can be 'mlp' or 'cnn'")
     parser.add_argument('--nn_batch_size', type=int, default=64, help="batch size for NN training")
-
+    parser.add_argument('--weight_decay', type=float, default=None, help="L2 regularization parameter for CNN")
     # "args" will keep in memory the arguments and their values,
     # which can be accessed as "args.data", for example.
     args = parser.parse_args()
