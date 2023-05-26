@@ -1,4 +1,5 @@
 import numpy as np
+import matplotlib.pyplot as plt
 
 ## MS2
 
@@ -43,6 +44,36 @@ class PCA(object):
         #### WRITE YOUR CODE HERE! 
         ###
         ##
+        X = training_data
+        self.mean = np.mean(X, axis=0)
+        # Center the data with the mean
+        X_tilde = X - self.mean
+        # Create the covariance matrix
+        C = X_tilde.T @ X_tilde / X_tilde.shape[0]
+
+        # Compute the eigenvectors and eigenvalues. Hint: look into np.linalg.eigh()
+        eigvals, eigvecs = np.linalg.eigh(C)
+        # Choose the top d eigenvalues and corresponding eigenvectors. 
+        # Hint: sort the eigenvalues (with corresponding eigenvectors) in decreasing order first.
+        ind = eigvals.argsort()[::-1][:self.d]
+
+        eg = eigvals[ind]
+        self.W = eigvecs[:, ind]
+
+        # project the data using W
+        #Y = X_tilde.dot(self.W)
+        
+        # Compute the explained variance
+        exvar = np.sum(eg) / np.sum(eigvals) * 100
+
+         # Compute the explained variance ratio
+        explained_variance_ratio = eg / np.sum(eg)
+    
+        # Compute the cumulative explained variance ratio
+        cumulative_variance = np.cumsum(explained_variance_ratio)
+
+        self.cumulative_explain_variance_plot(cumulative_variance)
+
         return exvar
 
     def reduce_dimension(self, data):
@@ -59,6 +90,26 @@ class PCA(object):
         #### WRITE YOUR CODE HERE! 
         ###
         ##
+        self.find_principal_components(data)
+
+        X = data
+        # Center the data with the mean
+        X_tilde = X - self.mean
+
+        # project the data using W
+        data_reduced = X_tilde.dot(self.W)
         return data_reduced
         
+    def cumulative_explain_variance_plot(self, cumulative_variance):
+        # Assuming you have your data in the variable 'X'
+
+        # Compute the cumulative explained variance ratio
+
+        # Plot the cumulative explained variance ratio
+        plt.plot(range(1, len(cumulative_variance) + 1), cumulative_variance, marker='o', linestyle='-', color='b')
+        plt.xlabel('Number of Components')
+        plt.ylabel('Cumulative Explained Variance Ratio')
+        plt.title('Cumulative Explained Variance Ratio')
+        plt.grid(True)
+        plt.show()
 

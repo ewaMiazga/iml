@@ -9,6 +9,10 @@ from src.methods.dummy_methods import DummyClassifier
 from src.methods.pca import PCA
 from src.methods.deep_network import MLP, CNN, Trainer
 from src.utils import normalize_fn, append_bias_term, accuracy_fn, macrof1_fn, get_n_classes
+from src.methods.kmeans import KMeans
+from src.methods.logistic_regression import LogisticRegression
+from src.methods.svm import SVM
+
 
 
 def main(args):
@@ -48,13 +52,11 @@ def main(args):
     if args.use_pca:
         print("Using PCA")
         pca_obj = PCA(d=args.pca_d)
+        xtrain_normalized = pca_obj.reduce_dimension(xtrain_normalized)
         ### WRITE YOUR CODE HERE: use the PCA object to reduce the dimensionality of the data
 
 
     ## 3. Initialize the method you want to use.
-
-    # python main2.py --data "data/dataset_MS2" --method nn --nn_type mlp --lr 1e-5 --max_iters 100
-    # python main2.py --data "data/dataset_MS2" --method nn --nn_type cnn --lr 1e-5 --max_iters 100
 
     # Neural Networks (MS2)
     if args.method == "nn":
@@ -77,11 +79,30 @@ def main(args):
 
         # Trainer object
         method_obj = Trainer(model, lr=args.lr, epochs=args.max_iters, batch_size=args.nn_batch_size)
-    
-    # python main2.py --data "data/dataset_MS2" --method dummy_classifier 
+     
     # Follow the "DummyClassifier" example for your methods (MS1)
     elif args.method == "dummy_classifier":
         method_obj =  DummyClassifier(arg1=1, arg2=2)
+
+    elif args.method == "kmeans":
+        method_obj = KMeans(
+            K=args.K, 
+            max_iters=args.max_iters
+            )
+
+    elif args.method == "logistic_regression":
+        method_obj = LogisticRegression(
+            lr=args.lr, 
+            max_iters=args.max_iters
+        )
+
+    elif args.method == "svm":
+        method_obj = SVM(
+            C=args.svm_c,
+            kernel=args.svm_kernel,
+            gamma=args.svm_gamma
+        )
+        method_obj.graph(xtrain, ytrain)
     
 
     ## 4. Train and evaluate the method
