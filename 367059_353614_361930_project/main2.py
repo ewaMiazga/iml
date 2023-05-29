@@ -47,12 +47,13 @@ def main(args):
     xtrain_normalized = normalize_fn(xtrain, xtrain_means, xtrain_stds)
     xtest_normalized = normalize_fn(xtest, xtrain_means, xtrain_stds) # normalize xtest with the same parameters as xtrain
 
-    s1 = time.time()
+
     # Dimensionality reduction (MS2)
     if args.use_pca:
         print("Using PCA")
         pca_obj = PCA(d=args.pca_d)
         xtrain_normalized = pca_obj.reduce_dimension(xtrain_normalized)
+        xtest_normalized = pca_obj.reduce_dimension(xtest_normalized)
         ### WRITE YOUR CODE HERE: use the PCA object to reduce the dimensionality of the data
 
 
@@ -102,20 +103,20 @@ def main(args):
             kernel=args.svm_kernel,
             gamma=args.svm_gamma
         )
-        method_obj.graph(xtrain, ytrain)
+        #method_obj.graph(xtrain, ytrain)
     
 
     ## 4. Train and evaluate the method
 
     # Fit (:=train) the method on the training data
-    preds_train = method_obj.fit(xtrain, ytrain)
-        
+    s1 = time.time()
+    preds_train = method_obj.fit(xtrain_normalized, ytrain)
+    
     # Predict on unseen data
-    preds = method_obj.predict(xtest)
+    preds = method_obj.predict(xtest_normalized)
 
     s2 = time.time()
-    print(s2-s1)
-    print("It takes", s2-s1, "seconds")
+    print(f"Time analysis Overall: time = {s2-s1}")
 
     ## Report results: performance on train and valid/test sets
     acc = accuracy_fn(preds_train, ytrain)

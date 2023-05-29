@@ -60,13 +60,11 @@ class PCA(object):
         eg = eigvals[ind]
         self.W = eigvecs[:, ind]
 
-        # project the data using W
-        #Y = X_tilde.dot(self.W)
         
         # Compute the explained variance
         exvar = np.sum(eg) / np.sum(eigvals) * 100
 
-         # Compute the explained variance ratio
+        # Compute the explained variance ratio
         explained_variance_ratio = eg / np.sum(eg)
     
         # Compute the cumulative explained variance ratio
