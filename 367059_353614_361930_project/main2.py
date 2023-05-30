@@ -73,8 +73,8 @@ def main(args):
             )
 
         elif args.nn_type == "cnn":
-            xtrain = xtrain.reshape(-1, 1, 32, 32)
-            xtest = xtest.reshape(-1, 1, 32, 32)
+            xtrain_normalized = xtrain_normalized.reshape(-1, 1, 32, 32)
+            xtest_normalized = xtest_normalized.reshape(-1, 1, 32, 32)
             model = CNN(input_channels=1, n_classes=number_classes, weight_decay=args.weight_decay) #should use get_n_classes to generalize here!!
         summary(model)
 
