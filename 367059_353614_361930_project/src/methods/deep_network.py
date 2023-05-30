@@ -142,6 +142,8 @@ class Trainer(object):
         """
         for ep in range(self.epochs):
             self.train_one_epoch(dataloader)
+            train_acc = self.calculate_accuracy(dataloader)
+            print(f"Epoch {ep+1} - Training accuracy: {train_acc:.2f}%")
 
             ### WRITE YOUR CODE HERE if you want to do add else at each epoch
 
@@ -236,3 +238,27 @@ class Trainer(object):
 
         # We return the labels after transforming them into numpy array.
         return pred_labels.numpy()
+    
+    def calculate_accuracy(self, dataloader):
+        """
+        Calculate the accuracy of the model predictions on the given data loader.
+
+        Arguments:
+            dataloader (DataLoader): DataLoader for the dataset
+        Returns:
+            accuracy (float): Accuracy of the model predictions in percentage
+        """
+        self.model.eval()
+        correct = 0
+        total = 0
+
+        with torch.no_grad():
+            for data in dataloader:
+                inputs, labels = data
+                outputs = self.model(inputs)
+                _, predicted = torch.max(outputs.data, 1)
+                correct += (predicted == labels).sum().item()
+                total += labels.size(0)
+
+        accuracy = (correct / total) * 100
+        return accuracy
