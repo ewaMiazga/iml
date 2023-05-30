@@ -52,6 +52,8 @@ def main(args):
     if args.use_pca:
         print("Using PCA")
         pca_obj = PCA(d=args.pca_d)
+        pca_obj.find_principal_components(xtest_normalized)
+        
         xtrain_normalized = pca_obj.reduce_dimension(xtrain_normalized)
         xtest_normalized = pca_obj.reduce_dimension(xtest_normalized)
         ### WRITE YOUR CODE HERE: use the PCA object to reduce the dimensionality of the data
