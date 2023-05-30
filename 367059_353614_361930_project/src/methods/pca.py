@@ -49,7 +49,7 @@ class PCA(object):
         # Center the data with the mean
         X_tilde = X - self.mean
         # Create the covariance matrix
-        C = X_tilde.T @ X_tilde / X_tilde.shape[0]
+        C = (X_tilde.T @ X_tilde) / X_tilde.shape[0]
 
         # Compute the eigenvectors and eigenvalues. Hint: look into np.linalg.eigh()
         eigvals, eigvecs = np.linalg.eigh(C)
@@ -62,7 +62,7 @@ class PCA(object):
 
         
         # Compute the explained variance
-        exvar = np.sum(eg) / np.sum(eigvals) * 100
+        exvar = (np.sum(eg) / np.sum(eigvals)) * 100
 
         # Compute the explained variance ratio
         explained_variance_ratio = eg / np.sum(eg)
@@ -88,7 +88,6 @@ class PCA(object):
         #### WRITE YOUR CODE HERE! 
         ###
         ##
-        self.find_principal_components(data)
 
         X = data
         # Center the data with the mean
