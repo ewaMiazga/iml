@@ -13,7 +13,7 @@ class MLP(nn.Module):
     It should not use any convolutional layers.
     """
 
-    def __init__(self, input_size, n_classes):
+    def __init__(self, input_size, n_classes, hidden_dim1=256, hidden_dim2=128):
         """
         Initialize the network.
         
@@ -30,6 +30,9 @@ class MLP(nn.Module):
         #### WRITE YOUR CODE HERE! 
         ###
         ##
+        self.fc1 = nn.Linear(input_size, hidden_dim1)
+        self.fc2 = nn.Linear(hidden_dim1, hidden_dim2)
+        self.fc3 = nn.Linear(hidden_dim2, n_classes)
         
     def forward(self, x):
         """
@@ -47,6 +50,10 @@ class MLP(nn.Module):
         ###
         ##
        # return preds
+        x = F.relu(self.fc1(x))
+        x = F.relu(self.fc2(x))
+        preds = self.fc3(x)
+        return preds
 
 
 class CNN(nn.Module):

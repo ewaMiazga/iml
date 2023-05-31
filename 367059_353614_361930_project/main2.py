@@ -70,8 +70,10 @@ def main(args):
         number_classes = get_n_classes(ytrain)
         if args.nn_type == "mlp":
             model = MLP(
-            lr=args.lr, 
-            max_iters=args.max_iters
+                input_size=xtrain_normalized.shape[1],  # Pass the input size
+                n_classes=number_classes,
+                hidden_dim1=256,  # Set the desired hidden layer dimensions
+                hidden_dim2=128,
             )
 
         elif args.nn_type == "cnn":

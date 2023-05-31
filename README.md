@@ -4,9 +4,9 @@
 ## PCA:
 - Kmeans:
 
-python main2.py --data "data\dataset_HASYv2" --method kmeans --K 20                                                        | Accuracy: 77.283% | Time: 9.279160976409912
+python main2.py --data "data/dataset_HASYv2" --method kmeans --K 20                                                        | Accuracy: 77.283% | Time: 9.279160976409912
 
-python main2.py --data "data\dataset_HASYv2" --method kmeans --K 20 --use_pca --pca_d 200                                  | Accuracy: 76.112% | Time: 0.6464433670043945
+python main2.py --data "data/dataset_HASYv2" --method kmeans --K 20 --use_pca --pca_d 200                                  | Accuracy: 76.112% | Time: 0.6464433670043945
 
 - Logistic regression:
 
