@@ -44,7 +44,7 @@ def main(args):
     ### WRITE YOUR CODE HERE to do any other data processing
     xtrain_means = xtrain.mean(0,keepdims=True)
     xtrain_stds  = xtrain.std(0,keepdims=True)
-    xtest_means  = xtest.std(0,keepdims=True)
+    xtest_means  = xtest.mean(0,keepdims=True)
     xtest_stds  = xtest.std(0,keepdims=True)
     xtrain_normalized = normalize_fn(xtrain, xtrain_means, xtrain_stds)
     xtest_normalized = normalize_fn(xtest, xtest_means, xtest_stds) # normalize xtest with the same parameters as xtrain
